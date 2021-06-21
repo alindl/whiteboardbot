@@ -1,0 +1,854 @@
+# German translations for Whiteboardbot.
+# Copyright (C) 2021 University of Salzburg
+# This file is distributed under the same license as the Whiteboardbot
+# project.
+# Andreas Lindlbauer <whiteboardbot.understress@aleeas.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  0.1.2\n"
+"Report-Msgid-Bugs-To: whiteboardbot.understress@aleeas.com\n"
+"POT-Creation-Date: 2021-06-14 16:31+0200\n"
+"PO-Revision-Date: 2021-06-14 16:36+0200\n"
+"Last-Translator: Andreas Lindlbauer "
+"<whiteboardbot.understress@aleeas.com>\n"
+"Language: de\n"
+"Language-Team: de <whiteboardbot.understress@aleeas.com>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: config_menu.py:350 forms.py:303 forms.py:332 forms.py:367
+msgid "Send to all activated outputs"
+msgstr "Über alle möglichen Ausgaben versenden"
+
+#: config_menu.py:350 forms.py:303 forms.py:332 forms.py:367
+msgid "Send to Slack"
+msgstr "Über Slack senden"
+
+#: config_menu.py:351 forms.py:304 forms.py:333 forms.py:368
+msgid "Send to all mail addresses"
+msgstr "An alle E-Mail adressen versenden"
+
+#: forms.py:50
+msgid "Either E-Mail or Slack must be activated"
+msgstr "Es muss entweder E-Mail oder Slack aktiviert sein"
+
+#: forms.py:60
+msgid "Must be a valid filename ending .wav"
+msgstr "Bitte geben Sie einen gültigen Dateinamen mit der Endung &#39.wav&#39 sein"
+
+#: forms.py:70
+msgid "Your choices overlap indirectly. Make sure you picked the right ones."
+msgstr "Ihre ausgewählten Ausgaben überlappen sich indirekt. Korrigieren Sie Ihre Auswahl."
+
+#: forms.py:86
+msgid "Enter a valid E-Mail Address"
+msgstr "Bitte geben Sie eine gültige E-Mail Adresse ein"
+
+#: forms.py:88
+msgid "E-Mail already in use."
+msgstr "Diese E-Mail wir schon verwendet"
+
+#: forms.py:98
+msgid "Password should be at least 8 characters long."
+msgstr "Das Passwort muss mindestens 8 Zeichen lang sein."
+
+#: forms.py:100
+msgid "Passwords don't match"
+msgstr "Die Passwörter stimmen nicht überein"
+
+#: forms.py:111 templates/admin.html:533 templates/admin.html:554
+#: templates/limited.html:243 templates/limited.html:263
+msgid "Slack channel"
+msgstr "Slack Channel"
+
+#: forms.py:113 templates/admin.html:535 templates/admin.html:556
+#: templates/limited.html:245 templates/limited.html:265
+msgid "The Slack channel where whiteboard images can be sent to"
+msgstr "Der Slack Channel, an dem die Aufnahmen veröffentlicht werden"
+
+#: forms.py:115
+msgid "demochannel"
+msgstr "Musterchannel"
+
+#: forms.py:121
+msgid "Trigger sound effect"
+msgstr "Signalton für das Betätigen des Schalters"
+
+#: forms.py:125
+msgid "Request sound effect"
+msgstr "Signalton für eine empfangene Anfrage"
+
+#: forms.py:129
+msgid "Error sound effect"
+msgstr "Signalton für einen Fehler"
+
+#: forms.py:133
+msgid "Upload sound effect"
+msgstr "Signalton für das Hochladen einer Datei"
+
+#: forms.py:137
+msgid "Camera sound effect"
+msgstr "Signalton für das Auslösen der Kamera"
+
+#: forms.py:141
+msgid "Ready sound effect"
+msgstr "Signalton, dass das System hochgefahren ist"
+
+#: forms.py:149
+msgid "Mail Address"
+msgstr "E-Mail Adresse"
+
+#: forms.py:164
+msgid "Use Slack"
+msgstr "Verwende Slack"
+
+#: forms.py:166
+msgid "Use Slack as a possible way to send pictures"
+msgstr "Verwende Slack als mögliche Ausgabe der Aufnahmen"
+
+#: forms.py:174
+msgid "Use e-mail"
+msgstr "Verwnde E-Mail"
+
+#: forms.py:176
+msgid "Use e-mail as a possible way to send pictures"
+msgstr "Verwnde E-Mail als mögliche Ausgabe der Aufnahmen"
+
+#: forms.py:184
+msgid "Read only mode"
+msgstr "Schreibschutzmodus"
+
+#: forms.py:190
+msgid "Status of the whole whiteboardbot system"
+msgstr "Status des ganzen Whiteboard Bot Systems"
+
+#: forms.py:192
+msgid "Status of BLE (Bluetooth Low Energy for buttons)"
+msgstr "Status von BLE (Bluetooth Low Energy für Schalter)"
+
+#: forms.py:194
+msgid "Status of Internet connection"
+msgstr "Status der Internetverbindung"
+
+#: forms.py:200
+msgid "Password of user"
+msgstr "Anmeldepasswort"
+
+#: forms.py:201
+msgid "A solid password that is at least 8 characters long"
+msgstr "Ein anständiges Passwort, mit 8 Zeichen Mindestlänge"
+
+#: forms.py:204 templates/change_password.html:60 templates/new_user.html:68
+msgid "Repeat password"
+msgstr "Wiederholung des Passworts"
+
+#: forms.py:205
+msgid "Repeat password that same password"
+msgstr "Wiederholen Sie Ihr Passwort"
+
+#: forms.py:212
+msgid "Number of "
+msgstr "Anzahl von "
+
+#: forms.py:218
+msgid "Last push"
+msgstr "Letze Betätigung"
+
+#: forms.py:220
+msgid ""
+"This is the timestamp of the last button press (or some random signal "
+"from the button)"
+msgstr "Der Zeitstempel der letzten Betätigung des Schalters (oder eines anderen Signals des Schalters)"
+
+#: forms.py:230
+msgid "sends images to:"
+msgstr "sendet Aufnahmen an:"
+
+#: forms.py:232
+msgid ""
+"This is where pictures are going to be sent to. Hold shift to select "
+"multiple entries,             but make sure that your choices don&#39t "
+"overlap."
+msgstr "Hierher werden Aufnahmen geschickt. Halten Sie die Shift-Taste gedrückt, um mehrere Ziele auszuwählen. Achten Sie darauf, dass sich Ihre Auswahl nicht überlappt."
+
+#: forms.py:242
+msgid "Name of button"
+msgstr "Name des Schalters"
+
+#: forms.py:244
+msgid ""
+"Pick a memorable name for this button.                This is for you to "
+"figure out which button does what."
+msgstr "Wählen Sie einen einprägsamen Namen für diesen Schalter. Dieser dient dazu, Ihnen das Zuordnen der Tasten zu erleichtern."
+
+#: forms.py:247
+msgid "Yellow button"
+msgstr "Gelber Schalter"
+
+#: forms.py:253
+msgid "Audio feedback"
+msgstr "Signaltöne"
+
+#: forms.py:255
+msgid ""
+"Audio signals that indicate progress.                Only editable by the"
+" admin."
+msgstr "Signaltöne die Auskunft über den Fortschritt geben. Diese Einstellung ist nur durch Administrator einstellbar."
+
+#: forms.py:263
+msgid "Visual feedback"
+msgstr "Visuelle Signale"
+
+#: forms.py:265
+msgid ""
+"Visual signals that indicate progress.                Only editable by "
+"the admin."
+msgstr "Visuelle Signale, wie Lampen oder Blitzlichter, die Auskunft über den Fortschritt geben. Diese Einstellung ist nur durch Administrator einstellbar."
+
+#: forms.py:278
+msgid "Send to mail address: "
+msgstr "Sende als E-Mail zu: "
+
+#: forms.py:298 forms.py:327
+msgid "MAC address "
+msgstr "MAC-Adresse "
+
+#: forms.py:356
+msgid "MAC address"
+msgstr "MAC-Adresse"
+
+#: forms.py:358
+msgid ""
+"MAC address of this button. It&#39s not that easy to figure out."
+"                Some print it on the package, but there&#39s a chance "
+"that you have to sniff it out."
+msgstr "Die MAC-Adresse dieses Schalters. Falls es nicht beim Produkt angegeben ist, müssen Sie diese durch Sniffing herausgefunden werden."
+
+#: forms.py:361
+msgid "Enter the valid MAC address of the button. No duplicates in the list"
+msgstr "Geben Sie eine korrekte MAC-Adresse für den Schalter an. Achten Sie auf Duplikate."
+
+#: forms.py:402 forms.py:640
+msgid "Camera"
+msgstr "Kamera"
+
+#: forms.py:404
+msgid ""
+"Choose the specific camera. If they have the same name, the first one is "
+"usually the correct one."
+msgstr "Wählen Sie eine Kamera aus. Wenn der selbe Name zwei mal vorkommt, dann ist es meistens die Erste."
+
+#: forms.py:407
+msgid "This source is already in use"
+msgstr "Diese Kamera ist bereits in Verwendung"
+
+#: forms.py:412
+msgid "Resolution"
+msgstr "Auflösung"
+
+#: forms.py:414
+msgid "Choose the resolution that is supported by this camera"
+msgstr "Wählen Sie eine Auflösung, die von Ihrer Kamera unterstützt wird"
+
+#: forms.py:416
+msgid "Resolution should be NUMBERxNUMBER"
+msgstr "Die Auflösung sollte das Format ZAHLxZAHL haben"
+
+#: forms.py:424
+msgid "Distortion metrics"
+msgstr "Parameter zur Verzerrungskorrektur"
+
+#: forms.py:426
+msgid ""
+"Parameters to fix lens distortion, such as -0.0145 0.0 0.07"
+"                        and an optional fourth number which is "
+"automatically calculated though."
+msgstr "Parameter um die Objektivkrümmung zu korrigieren. Diese Eingabe besteht aus 3 Dezimalzahlen wie z.B. -0.0145 0.0 0.07 wobei eine vierte Dezimalzahl automatisch berechnet wird."
+
+#: forms.py:429
+msgid "Parameters should be decimal numbers A B C [D]"
+msgstr "Die Parameter müssen aus 3 bis 4 Dezimalzahlen bestehen. Die Vierte ist optional."
+
+#: forms.py:435
+msgid "Cropping metrics"
+msgstr "Parameter für das Zuschneiden"
+
+#: forms.py:437
+msgid ""
+"Parameters should be\n"
+"LENGTHxHEIGHT[+/-]X_OFFSET[+/-]Y_OFFSET, such as 1920x1080-0+40"
+msgstr "Die Parameter müssen in folgendem Format sein: LÄNGExHÖHE[+/-]VERSATZ_X_ACHSE[+/-]VERSATZ_Y_ACHSE wie zum Beispiel 1920x1080-0+40"
+
+#: forms.py:440
+msgid "Parameters should be                 NUMBERxNUMBER[+/-]NUMBER[]+/-]NUMBER"
+msgstr "Die Parameter müssen aus folgenden ganzen Zahlen bestehen: ZAHLxZAHL[+/-]ZAHL[+/-]ZAHL"
+
+#: forms.py:461
+msgid "Enter a valid and unique email address"
+msgstr "Bitte geben Sie eine korrekte und eindeutige E-Mail Adresse an"
+
+#: forms.py:462
+msgid "jane.smith@example.com"
+msgstr "maria.musterfrau@mustermail.at"
+
+#: forms.py:481 forms.py:868 forms.py:902
+msgid "Username"
+msgstr "Anmeldename"
+
+#: forms.py:528 templates/admin.html:949 templates/admin.html:968
+msgid "Location of the error log"
+msgstr "Pfad zum Fehlerprotokoll"
+
+#: forms.py:530
+msgid ""
+"Insert absolute path to the file. The default is "
+"&#39/var/log/whiteboardbot/bot.log&#39                but it&#39s recommended to "
+"not change this."
+msgstr "Der absolute Pfad zur Datei. Dieser ist Standartmäßig als &#39/var/log/whiteboardbot/bot.log&#39 eingestellt, wobei empfohlen wird, diesen nicht zu ändern."
+
+#: forms.py:534 forms.py:545
+msgid "Invalid path"
+msgstr "Ungültiger Pfad"
+
+#: forms.py:540 templates/admin.html:658 templates/admin.html:676
+msgid "Location of sound directory"
+msgstr "Pfad zum Verzeichnis für Signaltöne"
+
+#: forms.py:542 templates/admin.html:660 templates/admin.html:678
+msgid "Absolute path to the sound folder"
+msgstr "Der absolute Pfad der zum Verzeichnis führt, der die Signaltöne beinhaltet"
+
+#: forms.py:565
+msgid "Use lens correction"
+msgstr "Verwende Objektivkrümmungskorrektur"
+
+#: forms.py:575
+msgid "Crop image"
+msgstr "Schneide Bilder zu"
+
+#: forms.py:577
+msgid ""
+"Crop the image.                              Mostly used to get rid of "
+"black borders caused by fixing the lens distortion"
+msgstr "Scheidet die Bilder zu, um schwarzee Ränder zu beseitigen, die durch die Objektivkrümmungskorrektur entstehen"
+
+#: forms.py:583
+msgid "Enhance image"
+msgstr "Optimiere Bilder"
+
+#: forms.py:585
+msgid ""
+"Automatically enhances whiteboard images to be more legible and sends "
+"them additionally"
+msgstr "Aufnahmen des Whiteboards werden automatisch korrigiert um sie besser lesbarer zu machen. Diese werden zusätzlich zum Originalbild verschickt"
+
+#: forms.py:591
+msgid "Slack channel "
+msgstr "Slack Channel "
+
+#: forms.py:597
+msgid "Activate request feature "
+msgstr "Anfragen aktivieren "
+
+
+#: forms.py:599
+msgid "Write &#39!snap&#39 in your whiteboard channel, get the next image directly via DM"
+msgstr "Nutzer:innen können &#39!snap&#39 in den gewählten Slack Channel schreiben und bekommen dadurch das nächste Bild direkt über eine Direktnachricht zugeschickt"
+
+#: forms.py:606
+msgid "Request duration "
+msgstr "Anfragezeitraum"
+
+#: forms.py:614
+msgid "E-Mail address of bot "
+msgstr "E-Mail Adresse für den Bot"
+
+#: forms.py:615
+msgid "whiteboardbot@example.com"
+msgstr "whiteboardbot@beispiel.at"
+
+#: forms.py:620
+msgid "Password of bot e-mail account"
+msgstr "Passwort des E-Mail Accounts für den Bot"
+
+#: forms.py:622
+msgid "The password of the bot e-mail account"
+msgstr "Passwort des E-Mail Accounts für den Bot"
+
+#: forms.py:624
+msgid "Hopefully not password1234"
+msgstr "Hoffentlich nicht &#39!password1234&#39!"
+
+#: forms.py:628
+msgid "SMTP server of bot e-mail account "
+msgstr "SMTP Server des E-Mail Accounts für den Bot"
+
+#: forms.py:629
+msgid "mail.example.com"
+msgstr "mail.beispiel.at"
+
+#: forms.py:633
+msgid "SMTP server port "
+msgstr "SMPT Server Port"
+
+#: forms.py:647
+msgid "User"
+msgstr "Nutzer:innen"
+
+#: forms.py:654 forms.py:823 forms.py:872 forms.py:905
+msgid "Saving status"
+msgstr "Status der Speicherung"
+
+#: forms.py:658 forms.py:819
+msgid "Name of current user"
+msgstr "Aktueller Anmeldename"
+
+#: forms.py:661 forms.py:825 forms.py:874 forms.py:907
+msgid "Submit"
+msgstr "Absenden"
+
+#: forms.py:671
+msgid "Invalid request period (must be decimal number)"
+msgstr "Ungültiger Anfragezeitraum (muss eine Dezimalzahl sein)"
+
+#: forms.py:680
+msgid ""
+"Invalid port number (usually 465,                         must be integer"
+" between 0 and 65535)"
+msgstr "Ungültige Port-Adresse. Üblicherweise 465. Es muss eine ganze Zahl zwischen 0 und 65535 sein."
+
+#: forms.py:691
+msgid "Invalid SMTP address (e.g. mail.example.com)"
+msgstr "Ungültige SMTP-Adresse"
+
+#: forms.py:700
+msgid "Invalid email address"
+msgstr "Ungültige E-Mail Adresse"
+
+#: forms.py:709
+msgid "Invalid number (Must be between 0 and 40)"
+msgstr "Unzulässige Eingabe. Es muss eine ganze Zahl zwischen 0 und 40 sein"
+
+#: forms.py:717 forms.py:842
+msgid "Invalid Slack channel name"
+msgstr "Name des Slack Channels ist ungültig"
+
+#: forms.py:725
+msgid ""
+"Invalid token. There must be a typo or                         copied the"
+" wrong token. It&#39s the &#39Bot User OAuth Access Token&#39"
+msgstr "Ungültiger Token. Sie haben sich entweder verschrieben oder den falschen Token kopiert. Den richtigen finden Sie unter: &#39Bot User OAuth Access Token&#39"
+
+#: forms.py:741
+msgid ""
+"Resolution should be of format                                 "
+"NUMBERxNUMBER e.g. 1920x1080"
+msgstr "Die Auflösung muss vom Format ZAHLxZAHL sein; z.B. 1920x1080"
+
+#: forms.py:745
+msgid ""
+"Duplicate camera source detected.                                 Change "
+"sources or delete cameras."
+msgstr "Duplikate bei der gewählten Kamera entdeckt. Ändern Sie die Kameraquelle oder löschen Sie sie."
+
+#: forms.py:756
+msgid ""
+"Parameters should be decimal                                 numbers A B "
+"C [D] (D is optional) e.g. -0.0145 0.0 0.07"
+msgstr "Parameter müssen aus 3 Dezimalzahlen bestehen, eine vierte ist optional. Z.B. -0.0145 0.0 0.07"
+
+#: forms.py:765
+msgid ""
+"Parameters should be of format                                 "
+"NUMBERxNUMBER[+/-]NUMBER[]+/-]NUMBER e.g. 4096x2160-20-40 or "
+"4096x2160-0+40 or                                 1920x1080\")"
+msgstr "Die Parameter müssen in folgendem Format sein: LÄNGExHÖHE[+/-]VERSATZ_X_ACHSE[+/-]VERSATZ_Y_ACHSE wie zum Beispiel 1920x1080-0+40"
+
+#: forms.py:779
+msgid ""
+"Enter a valid MAC-Address                                 e.g. "
+"ab:12:cd:34:ef:56"
+msgstr "Geben Sie eine gültige MAC-Adresse ein, wie z.B. ab:12:cd:34:ef:56"
+
+#: forms.py:782
+msgid ""
+"Duplicate MAC-address detected.                          Edit MAC-"
+"addresses or delete a button"
+msgstr "Duplikate bei den MAC-Adressen entdeckt. Ändern Sie die MAC-Adressen oder löschen Sie einen Schalter."
+
+#: forms.py:834
+msgid "Invalid number (Must be less than 40)"
+msgstr "Unzulässige Eingabe. Es muss eine ganze Zahl zwischen 0 und 40 sein"
+
+#: forms.py:869
+msgid "Username of new user"
+msgstr "Neuer Anmeldename"
+
+#: forms.py:881
+msgid "Username should be between 3 and 32 characters."
+msgstr "Anmeldename"
+
+#: forms.py:884
+msgid "Only letters, numbers, \"-\" and \"_\" are allowed."
+msgstr "Es sind nur Buchstaben, Ziffern, \"-\" and \"_\" erlaubt"
+
+#: forms.py:888
+msgid "This user already exists"
+msgstr "Dieser Anmeldename existiert bereits"
+
+#: templates/401.html:6 templates/403.html:6 templates/404.html:6
+#: templates/error.html:6 templates/index.html:6 templates/index.html:22
+msgid "Whiteboardbot Status"
+msgstr "Status des Whiteboard Bot"
+
+#: templates/401.html:20
+msgid "401 Wrong credentials"
+msgstr "401 Nicht Authentifiziert"
+
+#: templates/401.html:24
+msgid "Your log-in information was incorrect."
+msgstr "Ihre Anmeldeinformationen sind ungültig"
+
+#: templates/401.html:29 templates/403.html:29 templates/404.html:29
+#: templates/error.html:29
+msgid "Back to status"
+msgstr "Zurück zum Status"
+
+#: templates/403.html:20
+msgid "403 Not allowed"
+msgstr "403 Zugriff verweigert"
+
+#: templates/403.html:24
+msgid "You are not allowed to do that."
+msgstr "Sie verfügen nicht über die nötigen Zugriffsrechte"
+
+#: templates/404.html:20
+msgid "404 Not Found"
+msgstr "404 Nicht gefunden"
+
+#: templates/404.html:24
+msgid "This page you are looking for doesn&#39t exist."
+msgstr "Die Seite nach der Sie suchen existiert nicht."
+
+#: templates/admin.html:6 templates/admin.html:24
+#: templates/change_password.html:6 templates/limited.html:6
+#: templates/limited.html:24 templates/new_user.html:6
+msgid "Whiteboardbot Configuration"
+msgstr "Whiteboard Bot Konfiguration"
+
+#: templates/admin.html:30 templates/change_password.html:29
+#: templates/limited.html:30 templates/new_user.html:29
+msgid "Success!"
+msgstr "Erfolgreich!"
+
+#: templates/admin.html:30 templates/change_password.html:29
+#: templates/limited.html:30 templates/new_user.html:29
+msgid "Configuration was saved."
+msgstr "Die Einstellungen wurden gespeichert."
+
+#: templates/admin.html:64 templates/admin.html:100 templates/admin.html:153
+#: templates/admin.html:184 templates/admin.html:237 templates/admin.html:271
+#: templates/admin.html:479 templates/admin.html:642 templates/admin.html:909
+#: templates/admin.html:940 templates/admin.html:984 templates/admin.html:1015
+#: templates/admin.html:1074 templates/admin.html:1085
+#: templates/change_password.html:67 templates/limited.html:95
+#: templates/limited.html:120 templates/limited.html:151
+#: templates/limited.html:204 templates/limited.html:236
+#: templates/limited.html:281 templates/limited.html:379
+#: templates/new_user.html:75
+msgid "Save settings"
+msgstr "Einstellungen sichern"
+
+#: templates/admin.html:69 templates/limited.html:65
+msgid "Status"
+msgstr "Status"
+
+#: templates/admin.html:72 templates/index.html:52 templates/index.html:152
+#: templates/limited.html:68
+msgid "Edit settings"
+msgstr "Einstellungen bearbeiten"
+
+#: templates/admin.html:86 templates/admin.html:99 templates/index.html:59
+#: templates/limited.html:82 templates/limited.html:94
+msgid "Buttons"
+msgstr "Schalter"
+
+#: templates/admin.html:172 templates/admin.html:183
+msgid "Cameras"
+msgstr "Kameras"
+
+#: templates/admin.html:257 templates/admin.html:270 templates/index.html:45
+#: templates/limited.html:138 templates/limited.html:150
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: templates/admin.html:294 templates/admin.html:312
+msgid "E-Mail address of bot"
+msgstr "E-Mail Adresse für den Bot"
+
+#: templates/admin.html:296 templates/admin.html:314
+msgid "This is the e-mail address, that is sending the pictures"
+msgstr "Die E-Mail Adresse des Bot selber, der Ihnen über diese Adresse die Aufnahmen schickt"
+
+#: templates/admin.html:333 templates/admin.html:351
+msgid "SMTP server of the bot e-mail account"
+msgstr "SMTP Server des E-Mail accounts für den Bot"
+
+#: templates/admin.html:335 templates/admin.html:353
+msgid "The SMTP server address of the bot e-mail account"
+msgstr "Die SMTP Server Adresse des E-Mail Accounts für den Bot"
+
+#: templates/admin.html:367 templates/admin.html:385
+msgid "SMTP server port"
+msgstr "SMTP Server Port"
+
+#: templates/admin.html:369 templates/admin.html:387
+msgid "The SMTP server port. It#39s usually 465, but some SMTP servers are weird."
+msgstr "Der Port für den SMTP Server. Üblicherweise ist es 465."
+
+#: templates/admin.html:401 templates/limited.html:166
+msgid "Saved e-mail addresses"
+msgstr "Gespeicherte E-Mail Adressen"
+
+#: templates/admin.html:403 templates/limited.html:168
+msgid ""
+"These are the e-mail addresses that could receive images. To actually use"
+" them, pick them at the specific button"
+msgstr "Hier handelt es sich um die E-Mail Adressen, denen die Aufnahmen zugeschickt werden können. Um diese auch wirklich zu verwenden, müssen sie einem Schalter zugeordnet werden"
+
+#: templates/admin.html:496 templates/admin.html:514
+msgid "Slack token"
+msgstr "Slack Token"
+
+#: templates/admin.html:498 templates/admin.html:516
+msgid "Create a classic app, put its API-Token here"
+msgstr "Erstellen Sie eine Classic-App und kopieren Sie den API-Token hierher"
+
+#: templates/admin.html:573 templates/admin.html:590
+msgid "Request duration"
+msgstr "Anfragezeitraum"
+
+#: templates/admin.html:575 templates/admin.html:592
+msgid "The time out period for a request"
+msgstr "Die Zeit, in der eine Anfrage gültig ist. Danach gelten wieder die üblichen Einstellungen"
+
+#: templates/admin.html:630 templates/admin.html:641 templates/index.html:108
+#: templates/limited.html:293 templates/limited.html:304
+msgid "Feedback"
+msgstr "Signale"
+
+#: templates/admin.html:695 templates/admin.html:713
+msgid "Button sound"
+msgstr "Signalton für das Betätigen des Schalters"
+
+#: templates/admin.html:697 templates/admin.html:715
+msgid "Filename of sound file, that indicates pushing the button"
+msgstr "Name der Audiodatei, die ein Betätigen eines Schalters darstellt"
+
+#: templates/admin.html:730 templates/admin.html:748
+msgid "Request sound"
+msgstr "Signalton für eine empfangene Anfrage"
+
+#: templates/admin.html:732 templates/admin.html:750
+msgid "Filename of sound file, that indicates that someone requested a picture"
+msgstr "Name der Audiodatei, die eine Anfrage darstellt"
+
+#: templates/admin.html:767 templates/admin.html:785
+msgid "Error sound"
+msgstr "Signalton für einen Fehler"
+
+#: templates/admin.html:769 templates/admin.html:787
+msgid "Filename of sound file, that indicates that an error occurred"
+msgstr "Name der Audiodatei, die eine Fehlermeldung darstellt"
+
+#: templates/admin.html:802 templates/admin.html:820
+msgid "Upload sound"
+msgstr "Signalton für das Hochladen einer Datei"
+
+#: templates/admin.html:804 templates/admin.html:822
+msgid "Filename of sound file, that indicates that the image(s) were uploaded"
+msgstr "Name der Audiodatei, die das Hochladen einer oder mehrerer Dateien darstellt"
+
+#: templates/admin.html:839 templates/admin.html:857
+msgid "Camera sound"
+msgstr "Signalton für das Auslösen der Kamera"
+
+#: templates/admin.html:841 templates/admin.html:859
+msgid "Filename of sound file, that indicates that the camera took a picture"
+msgstr "Name der Audiodatei, die das Aufnehmen von Bildern darstellt"
+
+#: templates/admin.html:874 templates/admin.html:892
+msgid "Power-up sound"
+msgstr "Signalton, dass das System hochgefahren ist"
+
+#: templates/admin.html:876 templates/admin.html:894
+msgid ""
+"Filename of sound file, that indicates that the whiteboardbot system is "
+"up and ready"
+msgstr "Name der Audiodatei, die die Bereitschaft des Whiteboard Systems darstellt"
+
+#: templates/admin.html:929 templates/admin.html:939
+msgid "Debugging"
+msgstr "Fehlerbehebung"
+
+#: templates/admin.html:951 templates/admin.html:970
+msgid "Insert absolute path to file"
+msgstr "Geben Sie den absoluten Pfad zur Datei ein"
+
+#: templates/admin.html:1004
+msgid "User and passwords"
+msgstr "Anmeldename und Password"
+
+#: templates/admin.html:1014
+msgid "Users"
+msgstr "Nutzende"
+
+#: templates/admin.html:1031
+msgid "Reset password"
+msgstr "Password zurücksetzen"
+
+#: templates/admin.html:1060
+msgid "Add new user"
+msgstr "Neue:n Nutzer:in hinzufügen"
+
+#: templates/change_password.html:23
+msgid "Change password of"
+msgstr "Ändere Passwort von"
+
+#: templates/change_password.html:56
+msgid "New password for"
+msgstr "Neues Passwort für"
+
+#: templates/error.html:20
+msgid "Something went wrong"
+msgstr "Etwas ist schiefgelaufen"
+
+#: templates/error.html:24
+msgid "  We don&#39t know what you did, but something isn&#39t right."
+msgstr "  Wir wissen nicht, was Sie da getan haben, aber irgendetwas stimmt nicht."
+
+#: templates/index.html:29
+msgid "Button not configured"
+msgstr "Schalter ist nicht konfiguriert"
+
+#: templates/index.html:29
+msgid "No MAC address defined, so no button is detected."
+msgstr "Es wurde keine MAC-Adresse angegeben, es kann also auf keine Schalter reagiert werden."
+
+#: templates/index.html:45
+msgid "You need to configure where the pictures need to be sent to"
+msgstr "Sie müssen konfigurieren, wohin Aufnahmen gesendet werden"
+
+#: templates/limited.html:360
+msgid "Password"
+msgstr "Passwort"
+
+#: templates/limited.html:370
+msgid "Change password"
+msgstr "Ändere Passwort"
+
+#: templates/loading.html:4
+msgid "Loading..."
+msgstr "Lade..."
+
+#: templates/new_user.html:23
+msgid "Add new privileged user"
+msgstr "Neue:n berechtigte:n Nutzer:in hinzufügen"
+
+#: templates/new_user.html:56
+msgid "Name of new user"
+msgstr "Neuer Anmeldenamen"
+
+#: templates/new_user.html:64
+msgid "Password for new user"
+msgstr "Passwort für neuen Anmeldenamen"
+
+#: templates/status.html:4
+msgid "The whiteboard capture system is up and running"
+msgstr "Das Whiteboard System ist bereit"
+
+#: templates/status.html:6 templates/status.html:24 templates/status.html:41
+#: templates/status.html:58
+msgid "WhiteboardBot"
+msgstr "Whiteboard Bot"
+
+#: templates/status.html:7
+msgid "Active"
+msgstr "Aktiv"
+
+#: templates/status.html:9 templates/status.html:27 templates/status.html:44
+#: templates/status.html:61 templates/status.html:79 templates/status.html:96
+#: templates/status.html:113 templates/status.html:130
+#: templates/status.html:148 templates/status.html:165
+msgid "Just now"
+msgstr "Gerade eben"
+
+#: templates/status.html:22
+msgid "The whiteboard capture system is down, ask your technicians about this"
+msgstr "Das Whiteboard System ist nicht erreichbar. Fragen Sie Ihre technische Fachkraft."
+
+#: templates/status.html:25
+msgid "Error"
+msgstr "Fehler"
+
+#: templates/status.html:39
+msgid "The whiteboard capture system is deactivated on purpose"
+msgstr "Das Whiteboard System ist absichtlich deaktiviert"
+
+#: templates/status.html:56
+msgid ""
+"The whiteboard capture system is in an unexpected state. There must be "
+"something horribly wrong"
+msgstr "Das Whiteboard System ist in einem unvorhergesehenen Zustand. Es muss etwas sehr schief gelaufen sein."
+
+#: templates/status.html:74
+msgid "Bluetooth is up, so the configured button(s) should be able to trigger it"
+msgstr "Bluetooth ist aktiviert. Die konfigurierten Schalter sollten verwendbar sein"
+
+#: templates/status.html:76 templates/status.html:93 templates/status.html:110
+#: templates/status.html:127
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: templates/status.html:91
+msgid ""
+"Bluetooth failed, so it's not going to react to any button press. Ask "
+"your technicians about this"
+msgstr "Bluetooth ist abgestürzt. Schalter werden nicht erkannt werden. Fragen Sie Ihre technische Fachkraft."
+
+#: templates/status.html:108
+msgid "Bluetooth is deactivated, it's not going to react to any button press"
+msgstr "Bluetooth ist deaktiviert, es wird also nicht auf Schalter reagieren."
+
+#: templates/status.html:125
+msgid ""
+"Bluetooth is in an unexpected state, it's not going to react to any "
+"button press and something most have gone horribly wrong"
+msgstr "Bluetooth ist in einem unvorhergesehenen Zustand. Schalter werden deswegen nicht erkannt. Es muss etwas sehr schief gelaufen sein "
+
+#: templates/status.html:143
+msgid "The system has an internet connection"
+msgstr "Das System hat keine Internetverbindung"
+
+#: templates/status.html:145 templates/status.html:162
+msgid "Internet"
+msgstr "Internet"
+
+#: templates/status.html:160
+msgid ""
+"The system has no internet connection. You may be able to take a picture,"
+" but it's not going to be sent anywhere"
+msgstr "Das System hat keine Internetverbindung. Sie könnten das System aktivieren, aber die Bilder können nicht verschickt werden."
+
+#: templates/status.html:185
+msgid "Last updated "
+msgstr "Zuletzt vor "
+
+#: templates/status.html:185
+msgid " mins ago"
+msgstr " Minuten aktualisiert"
+

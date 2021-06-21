@@ -1,0 +1,28 @@
+#headingFive {
+  margin-bottom: 0px;
+}
+.card {
+  background-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+div.mail-entry>div>fieldset>legend {
+  display: none;
+}
+
+div.mail-entry>div>fieldset>div.form-group,
+div.mail-entry>div.form-group {
+  margin-bottom: 0;
+}
+
+.bi-plus,
+.bi-dash {
+  border-radius: 4px;
+}
+
+#id:target {
+  display: block;
+}

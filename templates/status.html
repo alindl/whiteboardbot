@@ -1,0 +1,193 @@
+<div class="row">
+  {% if form.wbb_status.data == 'active' %}
+    <div class="row alert alert-success col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("The whiteboard capture system is up and running") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('WhiteboardBot') }}</h5>
+        <span class="h2 font-weight-bold mb-0">{{ _('Active') }}</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="38" height="38" fill="currentColor"
+             class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+        </svg>
+      </div>
+    </div>
+  {% elif form.wbb_status.data == 'failed' %}
+    <div class="row alert alert-danger col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("The whiteboard capture system is down, ask your technicians about this") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('WhiteboardBot') }}</h5>
+        <span class="h2 font-weight-bold mb-0">{{ _('Error') }}</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-x-circle-fill"
+             viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+        </svg>
+      </div>
+    </div>
+  {% elif form.wbb_status.data == 'inactive' %}
+    <div class="row alert alert-warning col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("The whiteboard capture system is deactivated on purpose") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('WhiteboardBot') }}</h5>
+        <span class="h2 font-weight-bold mb-0">Inactive</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor"
+             class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"></path>
+        </svg>
+      </div>
+    </div>
+  {% else %}
+    <div class="row alert alert-info col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("The whiteboard capture system is in an unexpected state. There must be something horribly wrong") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('WhiteboardBot') }}</h5>
+        <span class="h2 font-weight-bold mb-0">Unexpected</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="38" height="38" fill="currentColor"
+             class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"></path>
+        </svg>
+      </div>
+    </div>
+  {% endif %}
+  {% if form.ble_status.data == 'active' %}
+    <div class="row alert alert-success col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("Bluetooth is up, so the configured button(s) should be able to trigger it") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('Bluetooth') }}</h5>
+        <span class="h2 font-weight-bold mb-0">Active</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="38" height="38" fill="currentColor"
+             class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+        </svg>
+      </div>
+    </div>
+  {% elif form.ble_status.data == 'failed' %}
+    <div class="row alert alert-danger col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("Bluetooth failed, so it's not going to react to any button press. Ask your technicians about this") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('Bluetooth') }}</h5>
+        <span class="h2 font-weight-bold mb-0">Error</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="38" height="38" fill="currentColor"
+             class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+        </svg>
+      </div>
+    </div>
+  {% elif form.ble_status.data == 'inactive' %}
+    <div class="row alert alert-warning col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("Bluetooth is deactivated, it's not going to react to any button press") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('Bluetooth') }}</h5>
+        <span class="h2 font-weight-bold mb-0">Inactive</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="38" height="38" fill="currentColor"
+             class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"></path>
+        </svg>
+      </div>
+    </div>
+  {% else %}
+    <div class="row alert alert-info col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("Bluetooth is in an unexpected state, it's not going to react to any button press and something most have gone horribly wrong") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('Bluetooth') }}</h5>
+        <span class="h2 font-weight-bold mb-0">Unexpected</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="38" height="38" fill="currentColor"
+             class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"></path>
+        </svg>
+      </div>
+    </div>
+  {% endif %}
+  {% if form.inet_status.data == True %}
+    <div class="row alert alert-success col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("The system has an internet connection") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('Internet') }}</h5>
+        <span class="h2 font-weight-bold mb-0">Online</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="38" height="38" fill="currentColor"
+             class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+        </svg>
+      </div>
+    </div>
+  {% else %}
+    <div class="row alert alert-danger col-sm mx-3" data-toggle='tooltip'
+         title='{{ _("The system has no internet connection. You may be able to take a picture, but it's not going to be sent anywhere") }}'>
+      <div class="col" style="padding: 0em">
+        <h5 class="card-title text-uppercase text-muted mb-0">{{ _('Internet') }}</h5>
+        <span class="h2 font-weight-bold mb-0">Offline</span>
+        <br/>
+        <small class="text-muted time-up text-nowrap">{{ _('Just now') }}</small>
+      </div>
+      <div class="col-auto align-self-center">
+        <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="38" height="38" fill="currentColor"
+             class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+          <path
+              d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+        </svg>
+      </div>
+    </div>
+  {% endif %}
+{% block javascript %}
+  <script>
+      async function timestamp_updater() {
+          let time_up = 0;
+          while (true) {
+              await new Promise(r => setTimeout(r, 60000));
+              const all_timers = document.getElementsByClassName('time-up');
+              time_up += 1;
+              for (const timer of all_timers) {
+                  timer.innerHTML = "{{ _('Last updated ') }}" + time_up + "{{ _(' mins ago') }}";
+                  //timer.innerHTML = "Last updated " + time_up + " mins ago"
+              }
+          }
+      }
+  </script>
+{% endblock %}
+
+</div>

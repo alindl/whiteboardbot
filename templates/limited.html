@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ _('Whiteboardbot Configuration') }}</title>
+  {% import "bootstrap/form.html" as wtf %}
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootswatch.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom-bubble.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom-dark.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/limited-page.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/fontawesome.all.min.css') }}">
+</head>
+
+<body onload="partVisibility('num_of_bttns', '#btn_val', 'btn_', 10)">
+{% block content %}
+  <script src="{{ url_for('.static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/scripts.js') }}"></script>
+  {% include 'loading.html' %}
+  <div class="container">
+    <div class="jumbotron jumbotron-fluid">
+      <h1>{{ _('Whiteboardbot Configuration') }}</h1>
+    </div>
+    <form method="POST" action="" onsubmit="resetFields('btn-entry', 'input'); resetFields('mail-entry', 'input');">
+      {{ form.csrf_token() }}
+      {% if form.success.data %}
+        <div class="alert alert-success alert-dismissible fade show saved" id="save-alert" role="alert">
+          <strong>{{ _('Success!') }}</strong> {{ _('Configuration was saved.') }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
+
+
+      {% for field, errors in form.errors.items() %}
+        {#
+      {% if field in ["num_buttons", "num_cams", "num_mail", "address", "smtp", "port", "token", "channel_name",
+      "request_period", "sounds_dir", "trigger_sound", "request_sound","error_sound","upload_sound",
+      "camera_sound","ready_sound","error_log"] and errors%}
+      #}
+        {% if field not in ["buttons", "cams", "mails"] and errors %}
+          <div class="alert alert-danger">
+            <strong>{{ form[field].label.text }}:</strong> {{ '; '.join(errors) }}
+          </div>
+        {% else %}
+          {% for form_in_field in errors %}
+            {% if form_in_field %}
+              {% for deep_field, deep_errors in form_in_field.items() %}
+                <div class="alert alert-danger">
+                  <strong>{{ form[field].label.text }}:</strong> {{ '; '.join(deep_errors) }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+
+      {% include 'status.html' %}
+
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="/">{{ _('Status') }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="edit">{{ _('Edit settings') }}</a>
+        </li>
+      </ul>
+
+      <div class="accordion" id="configSubMenus">
+        <div class="card">
+          {% if 'buttons' in form.errors %}
+            <div class="card-header bg-danger" id="headingOne">
+          {% else %}
+            <div class="card-header" id="headingOne">
+          {% endif %}
+          <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                    data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              {{ _('Buttons') }}
+              <span class="badge badge-dark" id="btn_val_2">{{ form.num_buttons.data }}</span>
+            </button>
+          </h2>
+          </div>
+
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#configSubMenus">
+            <div class="card-body">
+
+
+              <div class="container" onchange="validateMac();">
+                <div class="page-header">
+                  <h1 id="buttons">{{ _('Buttons') }}
+                    <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+
+                  </h1>
+                </div>
+                <div class="form-group col-sm-12" style="display: none; margin-bottom: 35px;">
+                  {{ form.num_buttons.label }}
+                  {{ form.num_buttons(class='form-range', id='num_of_bttns', min=1, max=10, step=1,
+                    oninput="partVisibility('num_of_bttns', '#btn_val', 'btn_', 10)") }}
+                  <output class="bubble" for="num_of_bttns" id="btn_val">
+                      <span class="badge" id="btn_val">
+                        {{ form.num_buttons.data }}
+                      </span>
+                  </output>
+                </div>
+                {% for nested in form.buttons %}
+                  <div class="row btn-entry" id="btn_{{ loop.index0 }}" style="display: block;">
+                    {% if loop.index0 != 0 %}
+                      <hr class="border border-secondary">
+                      </hr>
+                    {% endif %}
+                    <div class="form-group  col-sm-12">
+                      {{ wtf.render_field(nested, class='form-control') }}
+                    </div>
+                  </div>
+                {% endfor %}
+                <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+              </div>
+
+
+            </div>
+          </div>
+          </div>
+
+
+          <div class="card">
+            {% if 'mails' in form.errors %}
+              <div class="card-header bg-danger" id="headingTwo">
+            {% else %}
+              <div class="card-header" id="headingTwo">
+            {% endif %}
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                      data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                {{ _('E-Mail') }}
+                <span class="badge badge-dark" id="mail_val_2">{{ form.num_mail.data }}</span>
+              </button>
+            </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwp" data-parent="#configSubMenus">
+              <div class="card-body">
+
+
+                <div class="container"
+                     onchange="checkActivation('mail_bool', 'mail'); getActiveActions(); validateMail();">
+                  <div class="page-header">
+                    <h1 id="mails">{{ _('E-Mail') }}
+                      <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+
+                    </h1>
+                  </div>
+                  <div class="form-group col-sm-12" style="display: none; margin-bottom: 35px;">
+                    {{ wtf.render_field(form.mail_bool, class='form-check form-check-inline', type='checkbox',
+                      id='mail_bool') }}
+                    {{ form.num_mail(class='form-range mail', id='num_of_mails', min=1, max=41, step=1,
+                      oninput="partVisibility('num_of_mails', '#mail_val', 'mail_', 41)") }}
+                    <output class="bubble" for="num_of_mails" id="mail_val"><span class="badge"
+                                                                                  id="mail_val">{{ form.num_mail.data }}</span>
+                    </output>
+
+                  </div>
+                  <div class="mail" style="display: block;">
+                    <h3>{{ _('Saved e-mail addresses') }}
+                      <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' data-toggle='tooltip'
+                           title="{{ _('These are the e-mail addresses that could receive images. To actually use them, pick them at the specific button') }}"
+                           fill='currentColor' class='bi bi-info-circle'
+                           viewBox='0 0 16 16'>
+                        <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                        <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                      </svg>
+                    </h3>
+                    {% for nested in form.mails %}
+                      <div class="row mail-entry" id="mail_{{ loop.index0 }}" style="display: block;">
+                        <div class="form-group col-sm-12">
+                          {{ wtf.render_field(nested, class='form-control') }}
+                        </div>
+                      </div>
+                    {% endfor %}
+                    <div class="row mt-4">
+                      <div class="col-sm-12 text-center">
+                        <div>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                               class="bi bi-dash bg-black btn-danger" viewBox="0 0 16 16"
+                               onclick="rmItem('num_of_mails'); partVisibility('num_of_mails', '#mail_val', 'mail_', 41); checkActivation('mail_bool', 'mail'); getActiveActions(); validateMail(); ">
+
+                            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
+                          </svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                               class="bi bi-plus bg-black btn-success" viewBox="0 0 16 16"
+                               onclick="addItem('num_of_mails'); partVisibility('num_of_mails', '#mail_val', 'mail_', 41); checkActivation('mail_bool', 'mail'); getActiveActions(); validateMail(); ">
+                            <path
+                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                          </svg>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn edit-btn bg-black" style="margin-top: 1em;">{{ _('Save settings') }}
+                  </button>
+                </div>
+
+
+              </div>
+            </div>
+            </div>
+
+
+
+            <div class="card">
+              {% if form.channel_name.errors %}
+                <div class="card-header bg-danger" id="headingThree">
+              {% else %}
+                <div class="card-header" id="headingThree">
+              {% endif %}
+              <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                        data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Slack
+                </button>
+              </h2>
+              </div>
+              <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#configSubMenus">
+                <div class="card-body">
+
+
+                  <div class="container"
+                       onchange="checkActivation('slack_bool', 'slack'); requestActivation(); getActiveActions()">
+                    <div class="page-header">
+                      <h1 id="slack">Slack
+                        <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+
+                      </h1>
+                    </div>
+                    <div class="row slack" style="display: block;">
+                      {% if form.channel_name.errors %}
+                        <div class="form-group col-sm-12 has-error" id="slack-flex">
+                          <label for="channel_name">{{ _('Slack channel') }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                 title="{{ _('The Slack channel where whiteboard images can be sent to') }}"
+                                 fill='currentColor' class='bi bi-info-circle'
+                                 viewBox='0 0 16 16'>
+                              <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                              <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                            </svg>
+                          </label>
+                          <div class="input-group">
+                            <div class="input-group-addon" for="channel_name">#</div>
+                            {{ form.channel_name(class='form-control', id='channel_name') }}
+                          </div>
+                          <small class="invalid-feedback" style="display: block;">{% for error in
+                            form.channel_name.errors %}{{ error }}{% endfor %}</small>
+                        </div>
+                      {% else %}
+                        <div class="form-group col-sm-12 has-success" id="slack-flex">
+                          <label for="channel_name">{{ _('Slack channel') }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                 title="{{ _('The Slack channel where whiteboard images can be sent to') }}"
+                                 fill='currentColor' class='bi bi-info-circle'
+                                 viewBox='0 0 16 16'>
+                              <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                              <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                            </svg>
+                          </label>
+                          <div class="input-group">
+                            <div class="input-group-addon" for="channel_name">#</div>
+                            {{ form.channel_name(class='form-control', id='channel_name') }}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </div>
+                    <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+                  </div>
+
+                </div>
+              </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingFour">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                      {{ _('Feedback') }}
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#configSubMenus">
+                  <div class="card-body">
+
+
+                    <div class="container" onchange="checkActivation('audio_bool', 'audio')">
+
+                      <div class="page-header">
+                        <h1>{{ _('Feedback') }}</h1>
+                      </div>
+                      <div class="row align-items-center">
+                        <div class="form-group col-12 col-sm-6">
+                          {% if form.audio_bool.data %}
+                            <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="18" height="18"
+                                 fill="currentColor" class="bi bi-check-circle-fill checkbox-success"
+                                 viewBox="0 0 16 16">
+                              <path
+                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                            </svg>
+                          {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="18" height="18"
+                                 fill="currentColor" class="bi bi-x-circle-fill text-muted" viewBox="0 0 16 16">
+                              <path
+                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+                            </svg>
+                          {% endif %}
+                          {{ form.audio_bool.label }}
+                          {{ form.audio_bool(class='form_check', type='checkbox', style='display: none',
+                          id='audio_bool') }}
+                        </div>
+                        <div class="form-group col-12 col-sm-6">
+                          {% if form.visual_bool.data %}
+                            <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="18" height="18"
+                                 fill="currentColor" class="bi bi-check-circle-fill checkbox-success"
+                                 viewBox="0 0 16 16">
+                              <path
+                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                            </svg>
+                          {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" style="vertical-align: sub;" width="18" height="18"
+                                 fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                              <path
+                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+                            </svg>
+                          {% endif %}
+                          {{ form.visual_bool.label }}
+                          {{ form.visual_bool(class='form_check', type='checkbox', style='display: none',
+                          id='visual_bool') }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="card">
+                {% if 'error_log' in form.errors %}
+                  <div class="card-header bg-danger" id="headingFive">
+                {% else %}
+                  <div class="card-header" id="headingFive">
+                {% endif %}
+                <h2 class="mb-0">
+                  <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                          data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    {{ _('Password') }}
+                  </button>
+                </h2>
+                </div>
+                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#configSubMenus">
+                  <div class="card-body">
+
+                    <div class="container">
+                      <div class="row">
+                        <a href="/change_password/{{ form.current_user.data }}">
+                          <button type="button" class="btn btn-outline-warning">{{ _('Change password') }}</button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-4 mt-4">
+
+                  <button type="submit" class="btn btn-dark float-right">{{ _('Save settings') }}</button>
+                </div>
+                </div>
+              </div></form>
+    <script src="{{ url_for('.static', filename='js/after_scripts.js') }}"></script>
+  </div>
+{% endblock %}
+</body>
+
+</html>

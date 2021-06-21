@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ _('Whiteboardbot Status') }}</title>
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootswatch.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom-bubble.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom-dark.css') }}">
+
+</head>
+<body>
+  {% block content %}
+  <script src="{{ url_for('.static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/bootstrap.min.js') }}"></script>
+  {% include 'loading.html' %}
+  <div class="container">
+    <div class="jumbotron jumbotron-fluid border border-warning">
+      <h1 class="text-warning">{{ _('401 Wrong credentials') }}</h1>
+    </div>
+  </div>
+  <div class="text-center">
+    <h2>{{ _('Your log-in information was incorrect.') }}</h2>
+  <br/>
+
+  </div>
+      <a href="/"><button type="button" class="btn btn-lg bg-black back-btn btn-success mx-auto">
+          {{ _('Back to status') }}
+        </button></a>
+
+    <script src="{{ url_for('.static', filename='js/after_scripts.js') }}"></script>
+  </body>
+  {% endblock %}
+
+</html>

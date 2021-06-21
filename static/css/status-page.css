@@ -1,0 +1,37 @@
+.form-control {
+    border: none;
+}
+
+.mail-entry>div>fieldset>legend,
+.mail-entry>div>fieldset>div>label {
+    display: none;
+}
+
+.input-group-addon {
+    color: #93a1a1;
+    background-color: #002b36;
+    border: none;
+}
+
+div.btn-entry>div>fieldset>legend:nth-child(1),
+div.btn-entry>div>fieldset>div:nth-child(2),
+div.btn-entry>div>fieldset>div:nth-child(3) {
+    display: none;
+}
+
+.mail-entry>.form-group {
+    margin-bottom: 0px;
+}
+
+.slack>.form-check {
+    margin-top: 2%;
+}
+
+.card {
+    border: none;
+}
+
+
+#headingThree {
+    margin-bottom: 0px;
+}

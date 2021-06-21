@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ _('Whiteboardbot Configuration') }}</title>
+  {% import "bootstrap/form.html" as wtf %}
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/bootswatch.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom-bubble.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/custom-dark.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/admin-page.css') }}">
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/fontawesome.all.min.css') }}">
+</head>
+
+<body onload="partVisibility('num_of_bttns', '#btn_val', 'btn_', 10)">
+{% block content %}
+  <script src="{{ url_for('.static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='js/scripts.js') }}"></script>
+  {% include 'loading.html' %}
+  <div class="container">
+    <div class="jumbotron jumbotron-fluid">
+      <h1>{{ _('Whiteboardbot Configuration') }}</h1>
+    </div>
+    <form method="POST" action="" onsubmit="resetFields('btn-entry', 'input'); resetFields('mail-entry', 'input');">
+      {{ form.csrf_token() }}
+      {% if form.success.data %}
+        <div class="alert alert-success alert-dismissible fade show saved" id="save-alert" role="alert">
+          <strong>{{ _('Success!') }}</strong> {{ _('Configuration was saved.') }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endif %}
+
+
+      {% for field, errors in form.errors.items() %}
+        {#
+      {% if field in ["num_buttons", "num_cams", "num_mail", "address", "smtp", "port", "token", "channel_name",
+      "request_period", "sounds_dir", "trigger_sound", "request_sound","error_sound","upload_sound",
+      "camera_sound","ready_sound","error_log"] and errors%}
+      #}
+        {% if field not in ["buttons", "cams", "mails"] and errors %}
+          <div class="alert alert-danger">
+            <strong>{{ form[field].label.text }}:</strong> {{ '; '.join(errors) }}
+          </div>
+        {% else %}
+          {% for form_in_field in errors %}
+            {% if form_in_field %}
+              {% for deep_field, deep_errors in form_in_field.items() %}
+                <div class="alert alert-danger">
+                  <strong>{{ form[field].label.text }}:</strong> {{ '; '.join(deep_errors) }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+
+      {% include 'status.html' %}
+
+      <div class="mb-4 mt-4">
+        <button type="submit" class="btn btn-dark float-right">{{ _('Save settings') }}</button>
+      </div>
+
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="/">{{ _('Status') }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="edit">{{ _('Edit settings') }}</a>
+        </li>
+      </ul>
+
+      <div class="accordion" id="configSubMenus">
+        <div class="card">
+          {% if 'buttons' in form.errors %}
+            <div class="card-header bg-danger" id="headingOne">
+          {% else %}
+            <div class="card-header" id="headingOne">
+          {% endif %}
+          <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                    data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              {{ _('Buttons') }}
+              <span class="badge badge-dark" id="btn_val_2">{{ form.num_buttons.data }}</span>
+            </button>
+          </h2>
+          </div>
+
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+               data-parent="#configSubMenus">
+            <div class="card-body">
+
+
+              <div class="container" onchange="validateMac();">
+                <div class="page-header">
+                  <h1 id="buttons">{{ _('Buttons') }}
+                    <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+
+                  </h1>
+                </div>
+                <div class="row">
+                  <div class="form-group col-sm-12" style="display: none; margin-bottom: 35px;">
+                    {{ form.num_buttons(class='form-range', id='num_of_bttns', min=1, max=10, step=1,
+                      oninput="partVisibility('num_of_bttns', '#btn_val', 'btn_', 10)") }}
+                    <output class="bubble" for="num_of_bttns" id="btn_val"><span class="badge"
+                                                                                 id="btn_val">{{ form.num_buttons.data }}</span>
+                    </output>
+                  </div>
+                </div>
+                {% for nested in form.buttons %}
+                  <div class="row btn-entry" id="btn_{{ loop.index0 }}" style="display: block;">
+                    {% if loop.index0 != 0 %}
+                      <hr class="border border-secondary">
+                      </hr>
+                    {% endif %}
+                    <div class="form-group  col-sm-12">
+                      {#
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                           title='{{ _("Create a classic app here, get its API-Token") }}' fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                        <path
+                            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"></path>
+                      </svg>
+#}
+                      {{ wtf.render_field(nested, class='form-control')|safe }}
+                    </div>
+                  </div>
+                {% endfor %}
+                <div class="row mt-4">
+                  <div class="col-sm-12 text-center">
+                    <div>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                           fill="currentColor"
+                           class="bi bi-dash bg-black btn-danger" viewBox="0 0 16 16"
+                           onclick="rmItem('num_of_bttns'); partVisibility('num_of_bttns', '#btn_val', 'btn_', 10); validateMac(); ">
+
+                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
+                      </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                           fill="currentColor"
+                           class="bi bi-plus bg-black btn-success" viewBox="0 0 16 16"
+                           onclick="addItem('num_of_bttns'); partVisibility('num_of_bttns', '#btn_val', 'btn_', 10); validateMac(); ">
+                        <path
+                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                      </svg>
+
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+              </div>
+
+
+            </div>
+          </div>
+          </div>
+
+
+          <div class="card">
+            {% if 'cams' in form.errors %}
+              <div class="card-header bg-danger" id="headingTwo">
+            {% else %}
+              <div class="card-header" id="headingTwo">
+            {% endif %}
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left collapsed" type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                {{ _('Cameras') }}
+                <span class="badge badge-dark" id="cam_val_2">{{ form.num_cams.data }}</span>
+              </button>
+            </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                 data-parent="#configSubMenus">
+              <div class="card-body">
+
+                <div class="container" onchange="validateCams(); checkCamFields();">
+                  <div class="page-header">
+                    <h1>{{ _('Cameras') }}
+                      <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+
+                    </h1>
+                  </div>
+                  <div class="row align-items-center">
+                    <div class="form-group col-sm-6 col-md-3"
+                         style="display: none; margin-bottom: 35px;">
+                      {{ form.num_cams(class='form-range', id='num_of_cams', min=1, max=10, step=1,
+                        oninput="partVisibility('num_of_cams', '#cam_val', 'cam_', 10)") }}
+                      <output class="bubble" for="num_of_cams" id="cam_val"><span class="badge"
+                                                                                  id="cam_val">{{ form.num_cams.data }}</span>
+                      </output>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                      {{ wtf.render_field(form.fix_dist_bool, class='form-check', id='fix_dist', type='checkbox') }}
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                      {{ wtf.render_field(form.crop_bool, class='form-check', id='crop', type='checkbox') }}
+                    </div>
+                    <div class=" col-sm-6 col-md-4 custom-control custom-checkbox">
+                      {{ wtf.render_field(form.enhance_bool) }}
+                    </div>
+                  </div>
+                  {% for nested in form.cams %}
+                    <div class="row cam" id="cam_{{ loop.index0 }}" style="display: block;">
+                      <hr class="border border-secondary">
+                      </hr>
+                      <div class="form-group col-sm-12 inner-cam">
+                        {{ wtf.render_field(nested, class='form-control') }}
+                      </div>
+                    </div>
+                  {% endfor %}
+                  <div class="row mt-4">
+                    <div class="col-sm-12 text-center">
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             fill="currentColor"
+                             class="bi bi-dash bg-black btn-danger" viewBox="0 0 16 16"
+                             onclick="rmItem('num_of_cams'); partVisibility('num_of_cams', '#cam_val', 'cam_', 10); validateCams(); ">
+
+                          <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             fill="currentColor"
+                             class="bi bi-plus bg-black btn-success" viewBox="0 0 16 16"
+                             onclick="addItem('num_of_cams'); partVisibility('num_of_cams', '#cam_val', 'cam_', 10); validateCams(); ">
+                          <path
+                              d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                        </svg>
+
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}</button>
+                </div>
+
+              </div>
+            </div>
+            </div>
+
+
+
+            <div class="card">
+              {% if 'mails' in form.errors %}
+                <div class="card-header bg-danger" id="headingThree">
+              {% else %}
+                <div class="card-header" id="headingThree">
+              {% endif %}
+              <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button"
+                        data-toggle="collapse"
+                        data-target="#collapseThree" aria-expanded="false"
+                        aria-controls="collapseThree">
+                  {{ _('E-Mail') }}
+                  <span class="badge badge-dark" id="mail_val_2">{{ form.num_mail.data }}</span>
+                </button>
+              </h2>
+              </div>
+              <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                   data-parent="#configSubMenus">
+                <div class="card-body">
+
+
+                  <div class="container"
+                       onchange="checkActivation('mail_bool', 'mail'); getActiveActions(); validateMail();">
+                    <div class="page-header">
+                      <h1 id="mails">{{ _('E-Mail') }}
+                        <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}
+                        </button>
+
+                      </h1>
+                    </div>
+                    <div class="row align-items-center">
+                      <div class="form-group col-sm-12 col-md-6">
+                        {{ wtf.render_field(form.mail_bool, class='form-check form-check-inline', type='checkbox',
+                          id='mail_bool') }}
+                      </div>
+                      <div class="form-group col-sm-12 col-md-6"
+                           style="display: none; margin-bottom: 35px;">
+                        {{ form.num_mail(class='form-range mail', id='num_of_mails', min=1, max=41, step=1,
+                          oninput="partVisibility('num_of_mails', '#mail_val', 'mail_', 41)") }}
+                        <output class="bubble" for="num_of_mails" id="mail_val"><span
+                            class="badge" id="mail_val">{{ form.num_mail.data }}</span>
+                        </output>
+
+                      </div>
+                    </div>
+                    <div class="row mail" style="display: block;">
+                      {% if form.address.errors %}
+                        <div class="form-group col-sm-12 col-md-6 has-error">
+                          <label for="bot_address">{{ _('E-Mail address of bot') }}
+                            <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' data-toggle='tooltip'
+                                 title="{{ _('This is the e-mail address, that is sending the pictures') }}"
+                                 fill='currentColor' class='bi bi-info-circle'
+                                 viewBox='0 0 16 16'>
+                              <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                              <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                            </svg>
+                          </label>
+                          {{ form.address(class='form-control', id='bot_address', type='text') }}
+                          <small class="invalid-feedback" style="display: block;">
+                            {% for error in form.address.errors %}
+                              {{ error }}{% endfor %}</small>
+                        </div>
+                      {% else %}
+                        <div class="form-group col-sm-12 col-md-6 has-success">
+                          <label for="bot_address">{{ _('E-Mail address of bot') }}
+                            <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' data-toggle='tooltip'
+                                 title="{{ _('This is the e-mail address, that is sending the pictures') }}"
+                                 fill='currentColor' class='bi bi-info-circle'
+                                 viewBox='0 0 16 16'>
+                              <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                              <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                            </svg>
+                          </label>
+                          {{ form.address(class='form-control', id='bot_address', type='text') }}
+                        </div>
+                      {% endif %}
+                      <div class="form-group col-sm-12 col-md-6">
+                        {{ wtf.render_field(form.bot_password, class='form-control', type='text') }}
+                      </div>
+                    </div>
+                    <div class="row mail" style="display: block;">
+                      {% if form.smtp.errors %}
+                        <div class="form-group col-sm-12 col-md-6 has-error">
+                          <label for="smtp">{{ _('SMTP server of the bot e-mail account') }}
+                            <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' data-toggle='tooltip'
+                                 title="{{ _('The SMTP server address of the bot e-mail account') }}"
+                                 fill='currentColor' class='bi bi-info-circle'
+                                 viewBox='0 0 16 16'>
+                              <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                              <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                            </svg>
+                          </label>
+                          {{ form.smtp(class='form-control', id='smtp') }}
+                          <small class="invalid-feedback" style="display: block;">
+                            {% for error in form.smtp.errors %}
+                              {{ error }}{% endfor %}</small>
+                        </div>
+                      {% else %}
+                        <div class="form-group col-sm-12 col-md-6 has-success">
+                          <label for="smtp">{{ _('SMTP server of the bot e-mail account') }}
+                            <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' data-toggle='tooltip'
+                                 title="{{ _('The SMTP server address of the bot e-mail account') }}"
+                                 fill='currentColor' class='bi bi-info-circle'
+                                 viewBox='0 0 16 16'>
+                              <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                              <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                            </svg>
+                          </label>
+                          {{ form.smtp(class='form-control', id='smtp') }}
+                        </div>
+                      {% endif %}
+                      {% if form.port.errors %}
+                        <div class="form-group col-sm-12 col-md-6 has-error">
+                          <label for="port">{{ _('SMTP server port') }}
+                            <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' data-toggle='tooltip'
+                                 title='{{ _("The SMTP server port. It#39s usually 465, but some SMTP servers are weird.") }}'
+                                 fill='currentColor' class='bi bi-info-circle'
+                                 viewBox='0 0 16 16'>
+                              <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                              <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                            </svg>
+                          </label>
+                          {{ form.port(class='form-control', id='port') }}
+                          <small class="invalid-feedback" style="display: block;">
+                            {% for error in form.port.errors %}
+                              {{ error }}{% endfor %}</small>
+                        </div>
+                      {% else %}
+                        <div class="form-group col-sm-12 col-md-6 has-success">
+                          <label for="port">{{ _('SMTP server port') }}
+                            <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' data-toggle='tooltip'
+                                 title='{{ _("The SMTP server port. It#39s usually 465, but some SMTP servers are weird.") }}'
+                                 fill='currentColor' class='bi bi-info-circle'
+                                 viewBox='0 0 16 16'>
+                              <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                              <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                            </svg>
+                          </label>
+                          {{ form.port(class='form-control', id='port') }}
+                        </div>
+                      {% endif %}
+                    </div>
+                    <div class="mail" style="display: block;">
+                      <h3>{{ _('Saved e-mail addresses') }}
+                        <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' data-toggle='tooltip'
+                             title="{{ _('These are the e-mail addresses that could receive images. To actually use them, pick them at the specific button') }}"
+                             fill='currentColor' class='bi bi-info-circle'
+                             viewBox='0 0 16 16'>
+                          <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                          <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                        </svg>
+                      </h3>
+                      {% for nested in form.mails %}
+                        <div class="row mail-entry" id="mail_{{ loop.index0 }}"
+                             style="display: block;">
+                          <div class="form-group col-sm-12">
+                            {{ wtf.render_field(nested, class='form-control') }}
+                          </div>
+                        </div>
+                      {% endfor %}
+                      <div class="row mt-4">
+                        <div class="col-sm-12 text-center">
+                          <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                 fill="currentColor"
+                                 class="bi bi-dash bg-black btn-danger" viewBox="0 0 16 16"
+                                 onclick="rmItem('num_of_mails'); partVisibility('num_of_mails', '#mail_val', 'mail_', 41); checkActivation('mail_bool', 'mail'); getActiveActions(); validateMail(); ">
+
+                              <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"></path>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                 fill="currentColor"
+                                 class="bi bi-plus bg-black btn-success" viewBox="0 0 16 16"
+                                 onclick="addItem('num_of_mails'); partVisibility('num_of_mails', '#mail_val', 'mail_', 41); checkActivation('mail_bool', 'mail'); getActiveActions(); validateMail(); ">
+                              <path
+                                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                            </svg>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn edit-btn bg-black" style="margin-top: 1em;">
+                      Save
+                      settings
+                    </button>
+                  </div>
+
+
+                </div>
+              </div>
+              </div>
+
+
+
+              <div class="card">
+                {% if form.token.errors or form.channel_name.errors or form.request_period.errors %}
+                  <div class="card-header bg-danger" id="headingFour">
+                {% else %}
+                  <div class="card-header" id="headingFour">
+                {% endif %}
+                <h2 class="mb-0">
+                  <button class="btn btn-link btn-block text-left collapsed" type="button"
+                          data-toggle="collapse"
+                          data-target="#collapseFour" aria-expanded="false"
+                          aria-controls="collapseFour">
+                    Slack
+                  </button>
+                </h2>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                     data-parent="#configSubMenus">
+                  <div class="card-body">
+
+
+                    <div class="container"
+                         onchange="checkActivation('slack_bool', 'slack'); requestActivation(); getActiveActions()">
+                      <div class="page-header">
+                        <h1 id="slack">Slack
+                          <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}
+                          </button>
+
+                        </h1>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-sm-12 col-md-6">
+                          {{ wtf.render_field(form.slack_bool, class='form-check', type='checkbox') }}
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6 slack"
+                             style="display: block;">
+                          {{ wtf.render_field(form.request_bool, class='form-check', type='checkbox') }}
+                        </div>
+                      </div>
+                      <div class="row slack" style="display: block;">
+                        {% if form.token.errors %}
+                          <div class="form-group col-sm-12 has-error">
+                            <label for="slack_token">{{ _('Slack token') }}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                   title="{{ _('Create a classic app, put its API-Token here') }}"
+                                   fill='currentColor' class='bi bi-info-circle'
+                                   viewBox='0 0 16 16'>
+                                <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                              </svg>
+                            </label>
+                            {{ form.token(class='form-control', id='slack_token') }}
+                            <small class="invalid-feedback" style="display: block;">
+                              {% for error in form.token.errors %}
+                                {{ error }}{% endfor %}</small>
+                          </div>
+                        {% else %}
+                          <div class="form-group col-sm-12 has-success">
+                            <label for="slack_token">{{ _('Slack token') }}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                   title='{{ _("Create a classic app, put its API-Token here") }}'
+                                   fill='currentColor' class='bi bi-info-circle'
+                                   viewBox='0 0 16 16'>
+                                <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                              </svg>
+                            </label>
+                            {{ form.token(class='form-control', id='slack_token') }}
+                          </div>
+                        {% endif %}
+                      </div>
+                      <div class="row slack" style="display: block;">
+                        {% if form.channel_name.errors %}
+                          <div class="form-group col-sm-12 col-md-6 has-error"
+                               id="slack-flex">
+                            <label for="channel_name">{{ _('Slack channel') }}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                   title="{{ _('The Slack channel where whiteboard images can be sent to') }}"
+                                   fill='currentColor' class='bi bi-info-circle'
+                                   viewBox='0 0 16 16'>
+                                <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                              </svg>
+                            </label>
+                            <div class="input-group">
+                              <div class="input-group-addon" for="channel_name">#</div>
+                              {{ form.channel_name(class='form-control', id='channel_name') }}
+                            </div>
+                            <small class="invalid-feedback" style="display: block;">{% for error in
+                              form.channel_name.errors %}{{ error }}{% endfor %}</small>
+                          </div>
+                        {% else %}
+                          <div class="form-group col-sm-12 col-md-6 has-success"
+                               id="slack-flex">
+                            <label for="channel_name">{{ _('Slack channel') }}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                   title="{{ _('The Slack channel where whiteboard images can be sent to') }}"
+                                   fill='currentColor' class='bi bi-info-circle'
+                                   viewBox='0 0 16 16'>
+                                <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                              </svg>
+                            </label>
+                            <div class="input-group">
+                              <div class="input-group-addon" for="channel_name">#</div>
+                              {{ form.channel_name(class='form-control', id='channel_name') }}
+                            </div>
+                          </div>
+                        {% endif %}
+                        {% if form.request_period.errors %}
+                          <div class="form-group slack-request col-sm-12 col-md-6 has-error">
+                            <label for="request_period">{{ _('Request duration') }}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                   title="{{ _('The time out period for a request') }}"
+                                   fill='currentColor' class='bi bi-info-circle'
+                                   viewBox='0 0 16 16'>
+                                <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                              </svg>
+                            </label>
+                            {{ form.request_period(class='form-control', id='request_period') }}
+                            <small class="invalid-feedback" style="display: block;">{% for error in
+                              form.channel_name.errors %}{{ error }}{% endfor %}</small>
+                          </div>
+                        {% else %}
+                          <div class="form-group slack-request col-sm-12 col-md-6 has-success">
+                            <label for="request_period">{{ _('Request duration') }}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                   title="{{ _('The time out period for a request') }}"
+                                   fill='currentColor' class='bi bi-info-circle'
+                                   viewBox='0 0 16 16'>
+                                <path d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                              </svg>
+                            </label>
+                            {{ form.request_period(class='form-control', id='request_period') }}
+                          </div>
+                        {% endif %}
+                      </div>
+                      <button type="submit" class="btn edit-btn bg-black">Save settings</button>
+                    </div>
+
+                  </div>
+                </div>
+                </div>
+
+
+                <div class="card">
+                  {% if form.sounds_dir.errors or
+                  form.trigger_sound.errors or
+                  form.request_sound.errors or
+                  form.error_sound.errors or
+                  form.upload_sound.errors or
+                  form.camera_sound.errors or
+                  form.ready_sound.errors %}
+                    <div class="card-header bg-danger" id="headingFive">
+                  {% else %}
+                    <div class="card-header" id="headingFive">
+                  {% endif %}
+                  <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button"
+                            data-toggle="collapse"
+                            data-target="#collapseFive" aria-expanded="false"
+                            aria-controls="collapseFive">
+                      {{ _('Feedback') }}
+                    </button>
+                  </h2>
+                  </div>
+                  <div id="collapseFive" class="collapse" aria-labelledby="headingFive"
+                       data-parent="#configSubMenus">
+                    <div class="card-body">
+
+
+                      <div class="container" onchange="checkActivation('audio_bool', 'audio')">
+                        <div class="page-header">
+                          <h1 id="feedback">{{ _('Feedback') }}
+                            <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}
+                            </button>
+
+                          </h1>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-12 col-sm-6">
+                            {{ wtf.render_field(form.audio_bool, class='form-check', type='checkbox') }}
+                          </div>
+                          <div class="form-group col-12 col-sm-6">
+                            {{ wtf.render_field(form.visual_bool, class='form-check', type='checkbox') }}
+                          </div>
+                        </div>
+                        <div class="row audio">
+                          {% if form.sounds_dir.errors %}
+                            <div class="form-group col-sm-12 has-error">
+                              <label for="sounds_dir">{{ _('Location of sound directory') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Absolute path to the sound folder') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.sounds_dir(class='form-control', id='sounds_dir') }}
+                              <small class="invalid-feedback" style="display: block;">{% for error in
+                                form.sounds_dir.errors %}{{ error }}{% endfor %}</small>
+                            </div>
+                          {% else %}
+                            <div class="form-group col-sm-12 has-success">
+                              <label for="sounds_dir">{{ _('Location of sound directory') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Absolute path to the sound folder') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.sounds_dir(class='form-control', id='sounds_dir') }}
+                            </div>
+                          {% endif %}
+                        </div>
+                        <div class="row audio">
+                          {% if form.trigger_sound.errors %}
+                            <div class="form-group col-sm-12 col-md-6 has-error">
+                              <label for="trigger_sound">{{ _('Button sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates pushing the button') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.trigger_sound(class='form-control', id='trigger_sound') }}
+                              <small class="invalid-feedback" style="display: block;">{% for error in
+                                form.trigger_sound.errors %}{{ error }}{% endfor %}</small>
+                            </div>
+                          {% else %}
+                            <div class="form-group col-sm-12 col-md-6 has-success">
+                              <label for="trigger_sound">{{ _('Button sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates pushing the button') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.trigger_sound(class='form-control', id='trigger_sound') }}
+                            </div>
+                          {% endif %}
+                          {% if form.request_sound.errors %}
+                            <div class="form-group col-sm-12 col-md-6 has-error">
+                              <label for="request_sound">{{ _('Request sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that someone requested a picture') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.request_sound(class='form-control', id='request_sound') }}
+                              <small class="invalid-feedback" style="display: block;">{% for error in
+                                form.request_sound.errors %}{{ error }}{% endfor %}</small>
+                            </div>
+                          {% else %}
+                            <div class="form-group slack-request col-sm-12 col-md-6 has-success">
+                              <label for="request_sound">{{ _('Request sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that someone requested a picture') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.request_sound(class='form-control', id='request_sound') }}
+                            </div>
+                          {% endif %}
+                        </div>
+                        <div class="row audio">
+                          {% if form.error_sound.errors %}
+                            <div class="form-group col-sm-12 col-md-6 has-error">
+                              <label for="error_sound">{{ _('Error sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that an error occurred') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.error_sound(class='form-control', id='error_sound') }}
+                              <small class="invalid-feedback" style="display: block;">{% for error in
+                                form.error_sound.errors %}{{ error }}{% endfor %}</small>
+                            </div>
+                          {% else %}
+                            <div class="form-group col-sm-12 col-md-6 has-success">
+                              <label for="error_sound">{{ _('Error sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that an error occurred') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.error_sound(class='form-control', id='error_sound') }}
+                            </div>
+                          {% endif %}
+                          {% if form.upload_sound.errors %}
+                            <div class="form-group col-sm-12 col-md-6 has-error">
+                              <label for="upload_sound">{{ _('Upload sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that the image(s) were uploaded') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.upload_sound(class='form-control', id='upload_sound') }}
+                              <small class="invalid-feedback" style="display: block;">{% for error in
+                                form.upload_sound.errors %}{{ error }}{% endfor %}</small>
+                            </div>
+                          {% else %}
+                            <div class="form-group col-sm-12 col-md-6 has-success">
+                              <label for="upload_sound">{{ _('Upload sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that the image(s) were uploaded') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.upload_sound(class='form-control', id='upload_sound') }}
+                            </div>
+                          {% endif %}
+                        </div>
+                        <div class="row audio">
+                          {% if form.camera_sound.errors %}
+                            <div class="form-group col-sm-12 col-md-6 has-error">
+                              <label for="camera_sound">{{ _('Camera sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that the camera took a picture') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.camera_sound(class='form-control', id='camera_sound') }}
+                              <small class="invalid-feedback" style="display: block;">{% for error in
+                                form.camera_sound.errors %}{{ error }}{% endfor %}</small>
+                            </div>
+                          {% else %}
+                            <div class="form-group col-sm-12 col-md-6 has-success">
+                              <label for="camera_sound">{{ _('Camera sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that the camera took a picture') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.camera_sound(class='form-control', id='camera_sound') }}
+                            </div>
+                          {% endif %}
+                          {% if form.ready_sound.errors %}
+                            <div class="form-group col-sm-12 col-md-6 has-error">
+                              <label for="ready_sound">{{ _('Power-up sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that the whiteboardbot system is up and ready') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.ready_sound(class='form-control', id='ready_sound') }}
+                              <small class="invalid-feedback" style="display: block;">{% for error in
+                                form.ready_sound.errors %}{{ error }}{% endfor %}</small>
+                            </div>
+                          {% else %}
+                            <div class="form-group col-sm-12 col-md-6 has-success">
+                              <label for="ready_sound">{{ _('Power-up sound') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                     title="{{ _('Filename of sound file, that indicates that the whiteboardbot system is up and ready') }}"
+                                     fill='currentColor' class='bi bi-info-circle'
+                                     viewBox='0 0 16 16'>
+                                  <path
+                                      d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                  <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                </svg>
+                              </label>
+                              {{ form.ready_sound(class='form-control', id='ready_sound') }}
+                            </div>
+                          {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}
+                        </button>
+                      </div>
+
+                    </div>
+                  </div>
+                  </div>
+
+
+                  <div class="card">
+                    {% if 'error_log' in form.errors %}
+                      <div class="card-header bg-danger" id="headingSix">
+                    {% else %}
+                      <div class="card-header" id="headingSix">
+                    {% endif %}
+                    <h2 class="mb-0">
+                      <button class="btn btn-link btn-block text-left collapsed" type="button"
+                              data-toggle="collapse" data-target="#collapseSix"
+                              aria-expanded="false"
+                              aria-controls="collapseSix">
+                        {{ _('Debugging') }}
+                      </button>
+                    </h2>
+                    </div>
+                    <div id="collapseSix" class="collapse" aria-labelledby="headingSix"
+                         data-parent="#configSubMenus">
+                      <div class="card-body">
+
+                        <div class="container">
+                          <div class="page-header">
+                            <h1>{{ _('Debugging') }}
+                              <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}
+                              </button>
+
+                            </h1>
+                          </div>
+                          <div class="row">
+
+                            {% if form.error_log.errors %}
+                              <div class="form-group col-sm-12 has-error">
+                                <label for="error_log">{{ _('Location of the error log') }}
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                       title="{{ _('Insert absolute path to file') }}"
+                                       fill='currentColor' class='bi bi-info-circle'
+                                       viewBox='0 0 16 16'>
+                                    <path
+                                        d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                    <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                  </svg>
+                                </label>
+                                {{ form.error_log(class='form-control', id='error_log') }}
+                                <small class="invalid-feedback" style="display: block;">
+                                  {% for error in
+                                  form.error_log.errors %}{{ error }}{% endfor %}</small>
+                              </div>
+                            {% else %}
+                              <div class="form-group col-sm-12 has-success">
+                                <label for="error_log">{{ _('Location of the error log') }}
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" data-toggle="tooltip"
+                                       title="{{ _('Insert absolute path to file') }}"
+                                       fill='currentColor' class='bi bi-info-circle'
+                                       viewBox='0 0 16 16'>
+                                    <path
+                                        d='M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z'></path>
+                                    <path d='m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105
+                  1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275
+                  0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'></path>
+                                  </svg>
+                                </label>
+                                {{ form.error_log(class='form-control', id='error_log') }}
+                              </div>
+                            {% endif %}
+                          </div>
+                          <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}
+                          </button>
+                        </div>
+
+
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="card">
+                      {% if 'error_log' in form.errors %}
+                        <div class="card-header bg-danger" id="headingSeven">
+                      {% else %}
+                        <div class="card-header" id="headingSeven">
+                      {% endif %}
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                data-toggle="collapse" data-target="#collapseSeven"
+                                aria-expanded="false"
+                                aria-controls="collapseSeven">
+                          {{ _('User and passwords') }}
+                        </button>
+                      </h2>
+                      </div>
+                      <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven"
+                           data-parent="#configSubMenus">
+                        <div class="card-body">
+
+                          <div class="container">
+                            <div class="page-header">
+                              <h1>{{ _('Users') }}
+                                <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}
+                                </button>
+
+                              </h1>
+                            </div>
+                            <div class="row">
+
+                              <table class="table table-striped table-hover">
+                                <tbody>
+                                {% for nested in form.users %}
+                                  <tr>
+                                    <td>{{ nested.username.data }}</td>
+                                    <td class="text-center">
+                                      <a href="/change_password/{{ nested.username.data }}">
+                                        <button type="button"
+                                                class="btn bg-black btn-warning">
+                                          {{ _('Reset password') }}
+                                        </button>
+                                      </a>
+                                    </td>
+                                    <td>
+                                      {% if nested.username.data != "admin" %}
+                                        <a href="/delete_user/{{ nested.username.data }}">
+                                          <button class="btn btn-danger float-right bg-black"
+                                                  type="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="20" height="20"
+                                                 fill="currentColor"
+                                                 class="bi bi-trash bg-black"
+                                                 viewBox="0 0 16 16">
+                                              <path
+                                                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                                              <path fill-rule="evenodd"
+                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                            </svg>
+                                          </button>
+                                        </a>
+                                      {% endif %}
+                                    </td>
+                                  </tr>
+                                {% endfor %}
+                                <tr>
+                                  <td>
+                                    <a href="/new_user">
+                                      <button type="button"
+                                              class="btn bg-black btn-success">{{ _('Add new user') }}
+                                      </button>
+                                    </a>
+                                  </td>
+                                  <td>
+                                  </td>
+                                  <td>
+                                  </td>
+                                </tr>
+                                </tbody>
+                              </table>
+
+
+                            </div>
+                            <button type="submit" class="btn edit-btn bg-black">{{ _('Save settings') }}
+                            </button>
+                          </div>
+
+
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                    <div class="mb-4 mt-4">
+
+                      <button type="submit" class="btn btn-dark float-right">{{ _('Save settings') }}
+                      </button>
+                    </div>
+    </form>
+    <script src="{{ url_for('.static', filename='js/after_scripts.js') }}"></script>
+  </div>
+{% endblock %}
+</body>
+
+</html>
