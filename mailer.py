@@ -1,4 +1,5 @@
-"""Send mail with reminder or pictures.
+"""
+Send mail with reminder or pictures.
 
 :Author: Andreas Lindlbauer (@alindl)
 :Copyright: (c) 2021 University of Salzburg

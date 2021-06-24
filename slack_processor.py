@@ -29,7 +29,6 @@ class SigBot(Thread):
 
     def __init__(self, shared_queue, shared_signal, shared_slack, *args, **kwargs):
         super(SigBot, self).__init__(*args, **kwargs)
-        # TODO super(...) needed instead of super()?
         self.signal = shared_signal
         self.queue = shared_queue
         self.slack_bot = shared_slack
@@ -41,10 +40,6 @@ class SigBot(Thread):
             send_feedback(Message.UPLOAD)
             old_request = self.queue.get(block=False)
             self.queue.put(old_request, block=False)
-            # print("starting to check", file=open("/tmp/output.txt", "a"))
-            # print(old_request, file=open("/tmp/output.txt", "a"))
-
-            # sleep(float(get_key('Slack', 'request_period')))
 
             some_request = old_request
 
@@ -53,8 +48,6 @@ class SigBot(Thread):
                 if not self.queue.empty():
                     some_request = self.queue.get(block=False)
                     self.queue.put(some_request, block=False)
-                    # print("still checkin", file=open("/tmp/output.txt", "a"))
-                    # print(some_request, file=open("/tmp/output.txt", "a"))
                 sleep(1)
 
             if not self.queue.empty():

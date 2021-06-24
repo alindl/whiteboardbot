@@ -1,6 +1,9 @@
-"""Manages all interactions with Slack.
+"""
+Manages all interactions with Slack RTM.
 
-.. such as sending normal or ephemeral messages and uploading files.
+This is the request feature that would allow people to request pictures to be sent to them via DM.
+It is still a WIP as some bug prevents this from working but 
+it wasn't high enough prio to finish it in time.
 
 :Author: Andreas Lindlbauer (@alindl)
 :Copyright: (c) 2021 University of Salzburg
@@ -27,7 +30,6 @@ class RTMBot(Thread):
 
     def __init__(self, shared_queue, shared_signal, *args, **kwargs):
         super(RTMBot, self).__init__(*args, **kwargs)
-        # TODO is super(...) needed instead of super()? I'm not sure
         # self.slack_bot = shared
         self.queue = shared_queue
         self.signal = shared_signal
@@ -53,14 +55,13 @@ class RTMBot(Thread):
 
         * Every time a message gets through the system, there's a scan for the substring "!snap"
         * If there is such a message, save user and channel.
-        * Make or get the request file contents
         * Send an ephemeral apology if some other person already requested
-        * Send an ephemeral message, to the person requesting, save data to temp request file
+        * Send an ephemeral message, to the person requesting
         * Save data of the requester into requester file
 
         Requests, that have been unfulfilled, are discarded through checking the timestamp.
         Fulfilled requests are dealt with at the uploader (uploader.py), which erases the
-        request date in the temp request file after uploading.
+        request date after uploading.
 
         """
 
@@ -168,9 +169,9 @@ def get_user(slack_client, user_id):
         else:
             return res['user']
         return False
-    # FIXME this needs specified exception
     except SlackApiError:  # No internet or Slack is down
         print("Couldn't reach Slack workspace")
+    return False
 
 
 def send_ephemeral_message(slack_client, msg, user, link_names=False,

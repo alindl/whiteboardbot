@@ -1,4 +1,5 @@
-"""Simple interface to read from the config file
+"""
+Simple interface to read from the config file
 
 :Author: Andreas Lindlbauer (@alindl)
 :Copyright: (c) 2021 University of Salzburg

@@ -19,7 +19,6 @@ from wtforms import Form, FieldList, FormField, SelectField, \
     validators, ValidationError, SelectMultipleField, HiddenField
 from wtforms.fields.html5 import IntegerRangeField
 # from . import read_config as wbconf
-# NOTE Why do I have to NOT use the dot notation here???
 import read_config as wbconf
 
 # NOTE Security real talk:
@@ -103,6 +102,7 @@ def validate_password(form, field):
 # FIELD GENERATORS
 
 def generate_slack_channel_name_field():
+    """ Generate the information fo the slack channel name field """
     # NOTE: Wrongly doesn't match a channel name, ending in "-" or "_".
     #       Through this regex though, rightfully so, "-" and "_" are allowed at the beginning,
     #       but ONLY if num or letters follow

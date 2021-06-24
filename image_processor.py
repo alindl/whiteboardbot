@@ -28,15 +28,12 @@ def enhance(picture):
 def enhance_thread(file_name):
     """Enhance :params file_name: given."""
     # We now enhance the picture to be more legible through applying Difference of Gaussian
-    print(file_name)
-    # TODO test this
     _ = subprocess.run(["bash", "/usr/lib/whiteboardbot/enhancer.sh", file_name,
                         file_name[:-4] + "_ENHANCED.jpg"
                         ],
                        shell=False, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     print("finished subprocess")
-    # progress.set()
 
 
 def remove_pictures(pictures):
@@ -47,6 +44,7 @@ def remove_pictures(pictures):
 
 def take_picture(num, file_name):
     """Take a picture according to config. Name it as :param file_name:. Return Thread."""
+    # NOTE: This might pull too much power at once and turn off the Pi if it doesn't have enough amps
     cam = subprocess.Popen(["fswebcam", "-d", get_key('Cam' + str(num), 'src'),
                             "-p", "MJPEG", "-r",
                             get_key('Cam' + str(num), 'resolution'),
@@ -76,7 +74,6 @@ def crop_pic(file_name, metrics):
     return pic
 
 
-# Does exactly what the method name tells us
 #   private_channel   = Is the direct message channel, if empty string -> public channel
 def make_pic():
     """Main function to run through picture taking workflow. Return list of pictures.

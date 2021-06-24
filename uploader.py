@@ -1,4 +1,5 @@
-"""Manages all uploads of image files.
+"""
+Manages all uploads of image files.
 
 Focuses the upload through Slack or Mail, depending on configuration.
 
