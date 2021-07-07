@@ -1,3 +1,5 @@
+This is a fork of the [original project](https://git.sbg.ac.at/center-for-hci/whiteboardbot/whiteboardbot) from the Center of HCI at the University of Salzburg.
+
 # WhiteboardBot - Whiteboard capture, enhancement and sharing tool
 
 WhiteboardBot implements a system that uses a Raspberry Pi 3/4, or similar
